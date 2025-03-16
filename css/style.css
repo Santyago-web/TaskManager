@@ -2,6 +2,11 @@ body {
     margin: 0;
     background-color: black;
     color: white;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
 }
 
 ul li {

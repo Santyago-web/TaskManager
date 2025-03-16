@@ -39,7 +39,7 @@ function setupEventListeners(changeBtn, clearBtn, checkBox, textElement, taskEle
         if (isChecked) {
             textElement.style.textDecoration = 'line-through';
         } else {
-            textElement.style.textDecoration = 'none;'
+            textElement.style.textDecoration = 'none';
         }
         localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
     });
@@ -82,7 +82,6 @@ function add() {
         id: taskId,
         name: taskText,
         complete: checkBox.checked
-        
     };
     
     arrayTasks.push(newTask);
