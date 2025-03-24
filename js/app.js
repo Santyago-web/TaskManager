@@ -1,6 +1,7 @@
 let arrayTasks = [];
 
 function setupEventListeners(changeBtn, clearBtn, checkBox, textElement, taskElement, arrayTasks) {
+    
     changeBtn.addEventListener('click', function () {
         const taskElement = this.parentNode;
         let textElement = taskElement.querySelector('span');
@@ -71,6 +72,7 @@ function add() {
     const changeBtn = document.createElement('button');
     changeBtn.textContent = 'Change';
     changeBtn.dataset.taskId = taskId;
+    
 
     taskElement.appendChild(text);
     taskElement.appendChild(checkBox);
@@ -83,11 +85,11 @@ function add() {
     const newTask = {
         id: taskId,
         name: taskText,
-        complete: checkBox.checked
+        complete: checkBox.checked,
+        isVisible: true
     };
     
     arrayTasks.push(newTask);
-    console.log(arrayTasks);
     localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
 
     setupEventListeners(changeBtn, clearBtn, checkBox, text, taskElement, arrayTasks);
@@ -122,15 +124,20 @@ function createTaskElement(task) {
         text.style.textDecoration = 'none';
     }
     
+    if (!task.isVisible) {
+        taskElement.style.display = 'none';
+    }
+    
     taskElement.appendChild(text);
     taskElement.appendChild(checkBox);
     taskElement.appendChild(changeBtn);
     taskElement.appendChild(clearBtn);
 
     document.getElementById('tasks').appendChild(taskElement);
+    
+    
 
     setupEventListeners(changeBtn, clearBtn, checkBox, text, taskElement, arrayTasks);
-    
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -147,8 +154,10 @@ function hide() {
     arrayTasks.forEach(array => {
         let idTask = array.id;
         let task = document.getElementById(idTask);
-        if (array.complete) {
+        if (array.isVisible && array.complete) {
             task.style.display = 'none';
+            array.isVisible = false;
+            localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
         }
     });
 }
@@ -157,8 +166,10 @@ function show() {
     arrayTasks.forEach(array => {
         let idTask = array.id;
         let task = document.getElementById(idTask);
-        if (task.style.display === 'none') {
+        if (array.isVisible === false) {
             task.style.removeProperty('display');
+            array.isVisible = true;
+            localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
         }
     });
 }
