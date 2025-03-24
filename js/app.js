@@ -53,6 +53,7 @@ function add() {
 
     const taskElement = document.createElement('li');
     taskElement.id = taskId;
+    taskElement.className = 'task';
     
     const text = document.createElement('span');
     text.dataset.taskId = taskId;
@@ -61,6 +62,7 @@ function add() {
     const checkBox = document.createElement('input');
     checkBox.type = 'checkBox';
     checkBox.dataset.taskId = taskId;
+    checkBox.className = 'checkbox';
     
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Delete';
@@ -77,7 +79,7 @@ function add() {
     
     document.getElementById('tasks').appendChild(taskElement);
     document.getElementById('nameTask').value = '';
-
+    
     const newTask = {
         id: taskId,
         name: taskText,
@@ -94,6 +96,7 @@ function add() {
 function createTaskElement(task) {
     const taskElement = document.createElement('li');
     taskElement.id = task.id;
+    taskElement.className = 'task';
     
     const text = document.createElement('span');
     text.dataset.taskId = task.id;
@@ -103,6 +106,7 @@ function createTaskElement(task) {
     checkBox.type = 'checkbox';
     checkBox.dataset.taskId = task.id;
     checkBox.checked = task.complete;
+    checkBox.className = 'checkbox';
     
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Delete';
@@ -111,13 +115,13 @@ function createTaskElement(task) {
     const changeBtn = document.createElement('button');
     changeBtn.textContent = 'Change';
     changeBtn.dataset.taskId = task.id;
-
+    
     if (task.complete) {
         text.style.textDecoration = 'line-through';
     } else {
         text.style.textDecoration = 'none';
     }
-
+    
     taskElement.appendChild(text);
     taskElement.appendChild(checkBox);
     taskElement.appendChild(changeBtn);
@@ -139,4 +143,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function hide() {
+    arrayTasks.forEach(array => {
+        let idTask = array.id;
+        let task = document.getElementById(idTask);
+        if (array.complete) {
+            task.style.display = 'none';
+        }
+    });
+}
+
+function show() {
+    arrayTasks.forEach(array => {
+        let idTask = array.id;
+        let task = document.getElementById(idTask);
+        if (task.style.display === 'none') {
+            task.style.removeProperty('display');
+        }
+    });
+}
+
 document.getElementById('add').addEventListener('click', add);
+document.getElementById('hide').addEventListener('click', hide);
+document.getElementById('show').addEventListener('click', show);
+
+console.log(arrayTasks);
