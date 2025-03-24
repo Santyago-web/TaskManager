@@ -1,7 +1,18 @@
 let arrayTasks = [];
+/*let arrayCheckboxFilter = [];
+
+const completedFilter = document.getElementById('completed');
+
+const checkboxFilter = {
+    completed: completedFilter.checked
+}
+
+arrayCheckboxFilter.push(checkboxFilter);
+localStorage.setItem('arrayCheckboxFilter', JSON.stringify(arrayCheckboxFilter));*/
+
 
 function setupEventListeners(changeBtn, clearBtn, checkBox, textElement, taskElement, arrayTasks) {
-    
+
     changeBtn.addEventListener('click', function () {
         const taskElement = this.parentNode;
         let textElement = taskElement.querySelector('span');
@@ -39,8 +50,10 @@ function setupEventListeners(changeBtn, clearBtn, checkBox, textElement, taskEle
         arrayTasks[index].complete = isChecked;
         if (isChecked) {
             textElement.style.textDecoration = 'line-through';
+            textElement.style.color = 'green';
         } else {
             textElement.style.textDecoration = 'none';
+            textElement.style.color = 'white';
         }
         localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
     });
@@ -85,8 +98,7 @@ function add() {
     const newTask = {
         id: taskId,
         name: taskText,
-        complete: checkBox.checked,
-        isVisible: true
+        complete: checkBox.checked
     };
     
     arrayTasks.push(newTask);
@@ -120,13 +132,12 @@ function createTaskElement(task) {
     
     if (task.complete) {
         text.style.textDecoration = 'line-through';
+        text.style.color = 'green';
     } else {
         text.style.textDecoration = 'none';
+        text.style.color = 'white';
     }
     
-    if (!task.isVisible) {
-        taskElement.style.display = 'none';
-    }
     
     taskElement.appendChild(text);
     taskElement.appendChild(checkBox);
@@ -148,34 +159,28 @@ document.addEventListener('DOMContentLoaded', function() {
             createTaskElement(task);
         });
     }
+    
+    const savedFilter = localStorage.getItem('completed');
+    if (savedFilter) {
+        document.getElementById('completed').checked = JSON.parse(savedTasks);
+        hideShow()
+    }
 });
 
-function hide() {
+function hideShow() {
+    const checkboxFilter = document.getElementById('completed');
+    const isChecked = checkboxFilter.checked;
     arrayTasks.forEach(array => {
-        let idTask = array.id;
-        let task = document.getElementById(idTask);
-        if (array.isVisible && array.complete) {
+        const idTask = array.id;
+        const task = document.getElementById(idTask);
+        const checkboxTask = array.complete;
+        if (isChecked && checkboxTask) {
             task.style.display = 'none';
-            array.isVisible = false;
-            localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
-        }
-    });
-}
-
-function show() {
-    arrayTasks.forEach(array => {
-        let idTask = array.id;
-        let task = document.getElementById(idTask);
-        if (array.isVisible === false) {
+        } else {
             task.style.removeProperty('display');
-            array.isVisible = true;
-            localStorage.setItem('arrayTasks', JSON.stringify(arrayTasks));
         }
+        localStorage.setItem('completed', JSON.stringify(isChecked));
     });
 }
-
 document.getElementById('add').addEventListener('click', add);
-document.getElementById('hide').addEventListener('click', hide);
-document.getElementById('show').addEventListener('click', show);
-
-console.log(arrayTasks);
+document.getElementById('completed').addEventListener('change', hideShow);
